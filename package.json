@@ -23,7 +23,6 @@
   "scripts": {
     "start": "node app.js --mode development",
     "client": "webpack-dev-server --mode development --devtool inline-source-map --hot"
-
   },
   "author": "Sabina and Oscar",
   "license": "ISC"
