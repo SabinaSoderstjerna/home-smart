@@ -1,17 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const lights = [1, 2, 3, 4, 5, 6];
-
-function GetAllLights() {
-  fetch('/api/lights/')
-    .then(results => {
-      return results.json()
-    }).then((result) => {
-      console.log(result)
-      return result
-    }
-    )
+function lightsArray() {
+  return fetch('/api/lights/')
+    .then(function (res) {
+      return res.json();
+    }).then(function (body) {
+      return Object.keys(body)
+    },
+      (error) => {
+        return <div> Error: {error.message}) </div>
+      });
 }
 
 class LightState extends React.Component {
@@ -43,14 +42,14 @@ class LightState extends React.Component {
     this.setState(prevState => ({
       isLightOn: !prevState.isLightOn
     }));
-    fetch('/api/lights/5/toggle', {
-        method: 'PUT',
-        body: JSON.stringify({on: this.state.isLightOn}),
-        headers: {
-            'Content-Type': 'application/json'
-        }
+    fetch('/api/lights/' + this.props.lightNr + '/toggle', {
+      method: 'PUT',
+      body: JSON.stringify({ on: this.state.isLightOn }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     }).then(res => res.json())
-    .catch(err => err);
+      .catch(err => err);
   }
 
   render() {
@@ -71,15 +70,21 @@ class LightState extends React.Component {
 }
 
 function LightList(props) {
-  const lights = props.lights;
-
-  const listLights = lights.map((light) =>
-    <li key={light.toString()}>
-      < LightState lightNr={light} />
-    </li>
-  );
+  console.log(props.lights)
+  props.lights.then((result) => {
+    console.log(result);
+    var lights = result;
+    this.setState(lights.map((light) => ({
+      listLights:
+        <li key={light.toString()}>
+          < LightState lightNr={light} />
+        </li>
+    })));
+  }, (error) => {
+    return <div> Error: {error.message} </div>
+  })
   return (
-    <ul>{listLights}</ul>
+    <ul>{this.state.listLights}</ul>
   );
 }
 
@@ -88,7 +93,7 @@ function App() {
     <div>
       <h1> Welcome to home-smart </h1>
       <p> An app to make your home smarter </p>
-      < LightList lights={lights} />
+      < LightList lights={lightsArray()} />
     </div>
   );
 }
