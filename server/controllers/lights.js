@@ -28,6 +28,7 @@ lights.toggleLight = function (req, res) {
             },
             json:{"on": req.body.on}},
             function (error, response, body) {
+                
                 res.status(response.statusCode).send(body);
             });
     }
