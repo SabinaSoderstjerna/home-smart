@@ -4,8 +4,10 @@
   "description": "frontend for home-smart",
   "main": "app.js",
   "dependencies": {
+    "express": "^4.16.3",
     "react": "^16.4.1",
-    "react-dom": "^16.4.1"
+    "react-dom": "^16.4.1",
+    "request": "^2.87.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -13,8 +15,10 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^0.1.19",
+    "concurrently": "^3.5.1",
     "css-loader": "^0.28.11",
     "html-webpack-plugin": "^3.2.0",
+    "nodemon": "^1.17.5",
     "style-loader": "^0.21.0",
     "webpack": "^4.12.0",
     "webpack-cli": "^3.0.7",
@@ -22,7 +26,9 @@
   },
   "scripts": {
     "start": "node app.js --mode development",
-    "client": "webpack-dev-server --mode development --devtool inline-source-map --hot"
+    "client": "webpack-dev-server --mode development --devtool inline-source-map --hot",
+    "server": "nodemon ./server/server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Sabina and Oscar",
   "license": "ISC"
