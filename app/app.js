@@ -1,18 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-function lightsArray() {
-  return fetch('/api/lights/')
-    .then(function (res) {
-      return res.json();
-    }).then(function (body) {
-      return Object.keys(body)
-    },
-      (error) => {
-        return <div> Error: {error.message}) </div>
-      });
-}
-
 class LightState extends React.Component {
   constructor(props) {
     super(props);
@@ -39,21 +27,23 @@ class LightState extends React.Component {
   }
 
   handleClick() {
-    this.setState(prevState => ({
-      isLightOn: !prevState.isLightOn
-    }));
     fetch('/api/lights/' + this.props.lightNr + '/toggle', {
       method: 'PUT',
-      body: JSON.stringify({ on: this.state.isLightOn }),
+      body: JSON.stringify({ on: !this.state.isLightOn }),
       headers: {
         'Content-Type': 'application/json'
       }
     }).then(res => res.json())
       .catch(err => err);
+
+    this.setState(prevState => ({
+      isLightOn: !prevState.isLightOn
+    }));
   }
 
   render() {
     const { error, lightName, isLightOn } = this.state;
+    console.log(isLightOn)
     if (error) {
       return <div> Error: {error.message} </div>;
     } else {
@@ -69,23 +59,50 @@ class LightState extends React.Component {
   }
 }
 
-function LightList(props) {
-  console.log(props.lights)
-  props.lights.then((result) => {
-    console.log(result);
-    var lights = result;
-    this.setState(lights.map((light) => ({
-      listLights:
+class LightList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: null }
+  };
+
+  componentDidMount() {
+    lightsArray().then((result) => {
+      var lights = result;
+      var listLights = lights.map((light) =>
         <li key={light.toString()}>
           < LightState lightNr={light} />
         </li>
-    })));
-  }, (error) => {
-    return <div> Error: {error.message} </div>
-  })
-  return (
-    <ul>{this.state.listLights}</ul>
-  );
+      );
+      this.setState({
+        listLights: listLights
+      });
+    }, (error) => {
+      this.setState({
+        error: error
+      })
+    })
+  }
+
+  render() {
+    const { error, listLights } = this.state;
+    if (error) {
+      return <div> Error: error.message </div>
+    } else {
+      return <ul> {listLights} </ul>
+    }
+  }
+}
+
+function lightsArray() {
+  return fetch('/api/lights/')
+    .then(function (res) {
+      return res.json();
+    }).then(function (body) {
+      return Object.keys(body)
+    },
+      (error) => {
+        return <div> Error: {error.message}) </div>
+      });
 }
 
 function App() {
@@ -93,7 +110,7 @@ function App() {
     <div>
       <h1> Welcome to home-smart </h1>
       <p> An app to make your home smarter </p>
-      < LightList lights={lightsArray()} />
+      < LightList />
     </div>
   );
 }
