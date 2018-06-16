@@ -8,6 +8,6 @@ router.get('/', lightControllers.getLights);
 
 router.get('/:id', lightControllers.getLights);
 
-router.get('/:id/toggle', lightControllers.toggleLight);
+router.put('/:id/toggle', lightControllers.toggleLight);
 
 module.exports = router;

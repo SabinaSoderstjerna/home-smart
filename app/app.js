@@ -43,6 +43,14 @@ class LightState extends React.Component {
     this.setState(prevState => ({
       isLightOn: !prevState.isLightOn
     }));
+    fetch('/api/lights/5/toggle', {
+        method: 'PUT',
+        body: JSON.stringify({on: this.state.isLightOn}),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(res => res.json())
+    .catch(err => err);
   }
 
   render() {
