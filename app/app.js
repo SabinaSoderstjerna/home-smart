@@ -46,7 +46,6 @@ function App() {
       <h1> Welcome to home-smart </h1>
       <p> An app to make your home smarter </p>
       < LightList lights={lights} />
-      < MyComponent />
     </div>
   );
 }
