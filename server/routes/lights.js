@@ -10,4 +10,6 @@ router.get('/:id', lightControllers.getLights);
 
 router.put('/:id/toggle', lightControllers.toggleLight);
 
+router.put('/:id/brightness', lightControllers.setBrightness);
+
 module.exports = router;
