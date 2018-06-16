@@ -26,7 +26,7 @@ lights.toggleLight = function (req, res) {
             headers: {
                 'Content-Type' : 'application/json'
             },
-            json:{'on':false}},
+            json:{"on": req.body.on}},
             function (error, response, body) {
                 res.status(response.statusCode).send(body);
             });
