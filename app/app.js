@@ -1,14 +1,43 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const lights = [1, 2, 3, 4];
+const lights = [1, 2, 3, 4, 5, 6];
+
+function GetAllLights() {
+  fetch('/api/lights/')
+    .then(results => {
+      return results.json()
+    }).then((result) => {
+      console.log(result)
+      return result
+    }
+    )
+}
 
 class LightState extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isLightOn: true };
+    this.state = { error: null }
     this.handleClick = this.handleClick.bind(this);
   };
+
+  componentDidMount() {
+    fetch('/api/lights/' + this.props.lightNr)
+      .then(results => {
+        return results.json()
+      }).then((result) => {
+        this.setState({
+          isLightOn: result.state.on,
+          lightName: result.name
+        });
+      },
+
+        (error) => {
+          this.setState({
+            error
+          });
+        })
+  }
 
   handleClick() {
     this.setState(prevState => ({
@@ -17,22 +46,28 @@ class LightState extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        <p> Turn: {this.props.lightName} </p>
-        <button onClick={this.handleClick}>
-          {this.state.isLightOn ? 'ON' : 'OFF'}
-        </button>
-      </div>
-    );
+    const { error, lightName, isLightOn } = this.state;
+    if (error) {
+      return <div> Error: {error.message} </div>;
+    } else {
+      return (
+        <div>
+          <p> Turn: {lightName} </p>
+          <button onClick={this.handleClick}>
+            {isLightOn ? 'OFF' : 'ON'}
+          </button>
+        </div>
+      );
+    }
   }
 }
 
 function LightList(props) {
   const lights = props.lights;
+
   const listLights = lights.map((light) =>
     <li key={light.toString()}>
-      < LightState lightName={light} />
+      < LightState lightNr={light} />
     </li>
   );
   return (
@@ -46,7 +81,6 @@ function App() {
       <h1> Welcome to home-smart </h1>
       <p> An app to make your home smarter </p>
       < LightList lights={lights} />
-      < MyComponent />
     </div>
   );
 }
