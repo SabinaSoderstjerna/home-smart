@@ -51,7 +51,7 @@ class LightState extends React.Component {
 
             return (
                 <div>
-                    <p> Turn: {lightName} </p>
+                    <h3> {lightName} </h3>
                     <button onClick={this.handleClick}>
                         {isLightOn ? 'OFF' : 'ON'}
                     </button>

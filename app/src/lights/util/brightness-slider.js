@@ -18,10 +18,6 @@ class HorizontalSlider extends React.Component {
         };
     }
 
-    handleChangeStart() {
-        console.log('Change event started');
-    };
-
     handleChange(value) {
         /* Change bri settings on lights */
         debounce(10, fetch('/api/lights/' + this.props.lightNr + '/brightness', {
@@ -38,24 +34,17 @@ class HorizontalSlider extends React.Component {
         });
     };
 
-    handleChangeComplete() {
-        console.log('Change event completed');
-    };
-
     render() {
         const { value } = this.state
-        console.log(value)
         return (
             <div className='slider'>
                 <Slider
                     min={0}
                     max={255}
                     value={value}
-                    onChangeStart={this.handleChangeStart}
                     onChange={this.handleChange}
-                    onChangeComplete={this.handleChangeComplete}
                 />
-                <div className='value'>{value}</div>
+                <div className='value'>Brightness: {value}</div>
             </div>
         )
     }
