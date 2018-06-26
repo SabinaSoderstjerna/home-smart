@@ -44,8 +44,9 @@ function lightsArray() {
             return Object.keys(body)
         },
             (error) => {
-                return <div> Error: {error.message}) </div>
+                return <div> Error: {error.message} </div>
             });
 }
+
 
 export default LightList
