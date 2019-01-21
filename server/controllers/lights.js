@@ -1,16 +1,17 @@
 const request = require('request');
 
 var lights = {};
+var ipAdress = '192.168.1.121';
 
 lights.getLights = function (req, res) {
     if (req.params.id) {
-        request.get('http://192.168.8.100' + '/api/' + '6x-bkvv6nNQ8phAferczfhNvRSzvG8j4uvYuJUgW/lights/' + req.params.id,
+        request.get('http://' + ipAdress + '/api/' + '6x-bkvv6nNQ8phAferczfhNvRSzvG8j4uvYuJUgW/lights/' + req.params.id,
             { json: true },
             function (error, response, body) {
                 res.status(response.statusCode).send(body);
             });
     } else {
-        request.get('http://192.168.8.100' + '/api/' + '6x-bkvv6nNQ8phAferczfhNvRSzvG8j4uvYuJUgW/lights',
+        request.get('http://' + ipAdress + '/api/' + '6x-bkvv6nNQ8phAferczfhNvRSzvG8j4uvYuJUgW/lights',
             { json: true },
             function (error, response, body) {
                 res.status(response.statusCode).send(body);
@@ -22,7 +23,7 @@ lights.getLights = function (req, res) {
 lights.toggleLight = function (req, res) {
     if (req.params.id) {
         request({
-            url: 'http://192.168.8.100' + '/api/' + '6x-bkvv6nNQ8phAferczfhNvRSzvG8j4uvYuJUgW/lights/' + req.params.id + '/state',
+            url: 'http://' + ipAdress + '/api/' + '6x-bkvv6nNQ8phAferczfhNvRSzvG8j4uvYuJUgW/lights/' + req.params.id + '/state',
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -39,7 +40,7 @@ lights.toggleLight = function (req, res) {
 lights.setBrightness = function (req, res) {
     if (req.params.id) {
         request({
-            url: 'http://192.168.8.100' + '/api/' + '6x-bkvv6nNQ8phAferczfhNvRSzvG8j4uvYuJUgW/lights/' + req.params.id + '/state',
+            url: 'http://' + ipAdress + '/api/' + '6x-bkvv6nNQ8phAferczfhNvRSzvG8j4uvYuJUgW/lights/' + req.params.id + '/state',
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -57,7 +58,7 @@ lights.setColor = function (req, res) {
     if (req.params.id) {
         var xy = calculateColorFromHex(req.body.hexColor, req.body.brightness);
         request({
-            url: 'http://192.168.8.100' + '/api/' + '6x-bkvv6nNQ8phAferczfhNvRSzvG8j4uvYuJUgW/lights/' + req.params.id + '/state',
+            url: 'http://' + ipAdress + '/api/' + '6x-bkvv6nNQ8phAferczfhNvRSzvG8j4uvYuJUgW/lights/' + req.params.id + '/state',
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
